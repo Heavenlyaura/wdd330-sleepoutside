@@ -29,3 +29,26 @@ export function getParam(params) {
   const product = urlParams.get(params)
   return product;
 }
+
+// export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
+//   if (clear) {
+//     parentElement.innerHTML = "";
+//   }
+//   const htmlStrings = list.map(templateFn);
+//   parentElement.insertAdjacentHTML(position, htmlStrings.join(''));
+// }
+
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = "afterbegin",
+  clear = false
+) {
+  const htmlStrings = list.map(templateFn);
+  // if clear is true we need to clear out the contents of the parent.
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
