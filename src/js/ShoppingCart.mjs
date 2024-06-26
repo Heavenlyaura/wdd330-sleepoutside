@@ -28,7 +28,19 @@ export default class ShoppingCart {
   }
   renderCartContents() {
     const cartItems = getLocalStorage(this.key);
+    calculateTotal(cartItems)
     const htmlItems = cartItems.map((item) => cartItemTemplate(item));
     this.parentSelector.innerHTML = htmlItems.join("");
+  }
+}
+function calculateTotal(cartItems) {
+  if (cartItems) {
+
+    const price = document.querySelector(".cart-total")
+    console.log(price)
+    price.style.display = 'block'
+    let total = cartItems.reduce((total, item) => total + item.FinalPrice, 0);
+    price.innerHTML = `Total: $${total.toFixed(2)}`;
+    console.log(total)
   }
 }
