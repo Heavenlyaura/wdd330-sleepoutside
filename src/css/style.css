@@ -117,24 +117,26 @@ button {
 
 /* product grid styles */
 .product-grid {
-  list-style-type: none;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   text-align: center;
-  color: var(--dark-grey);
+  padding: 2em;
+  list-style-type: none;
   padding-left: 0;
 }
 
+.product-grid > div {
+  margin: 20px; 
+}
 .product-grid > li {
   width: 150px;
   /* border: 1px solid var(--light-grey); */
-  padding: 0.5em;
+  padding: 2em;
   margin: 1em;
 }
 .product-grid h2 {
   margin: 0;
-
   font-size: 1.2em;
 }
 .product-grid a {
@@ -256,6 +258,25 @@ button {
   padding: 2px 6px;
   font-size: 12px;
 }
+
+.alert-list {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.alert-list p {
+  margin: 0;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
 
 @media screen and (min-width: 500px) {
   body {

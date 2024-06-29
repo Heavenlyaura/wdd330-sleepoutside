@@ -2,6 +2,7 @@ import ProductData from "./ProductData.mjs";
 import ProductListing from "./productList.mjs";
 import { loadHeaderFooter } from "./utils.mjs";
 import { setupCart } from "./cart.js";
+import Alert from "./alert.js";
 
 loadHeaderFooter();
 
@@ -13,3 +14,8 @@ productListing.init();
 
 // Setup cart functionality
 setupCart();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const alert = new Alert();
+  alert.fetchAlerts();
+});
