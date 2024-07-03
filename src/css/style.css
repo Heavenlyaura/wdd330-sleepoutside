@@ -246,6 +246,26 @@ button {
   float: right;
 }
 
+.categories {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  text-align: center;
+  gap: 1.5rem;
+
+}
+
+.categories img {
+  height: fit-content;
+}
+
+.categories a {
+  font-size: .9rem;
+  color: black;
+
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
