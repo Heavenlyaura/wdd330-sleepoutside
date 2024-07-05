@@ -35,9 +35,21 @@ export default class ProductDetails {
       .getElementById("addToCart")
       .addEventListener("click", this.addToCart.bind(this));
   }
+
+
   addToCart() {
     let cart = getLocalStorage("so-cart") || [];
-    cart.push(this.product)
+    const productIndex = cart.findIndex(item => item.Id === this.product.Id);
+
+    if (productIndex !== -1) {
+      // If product already in cart, increment quantity
+      cart[productIndex].quantity += 1;
+    } else {
+      // If product not in cart, add it with quantity 1
+      this.product.quantity = 1;
+      cart.push(this.product);
+    }
+
     setLocalStorage("so-cart", cart);
   }
   renderProductDetails(selector) {
