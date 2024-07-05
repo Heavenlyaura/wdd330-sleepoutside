@@ -79,3 +79,18 @@ export function renderWithTemplate(template, parentElement, data, callback) {
   }
 }
 
+export function alertMessage(message, scroll = true) {
+  const alert = document.createElement('div');
+  alert.classList.add('alert');
+  alert.innerHTML = `
+    <p>${message}</p>
+    <span class="close-alert">X</span>
+  `;
+  alert.querySelector('.close-alert').addEventListener('click', () => {
+    alert.remove();
+  });
+  const main = document.querySelector('main');
+  main.prepend(alert);
+  if (scroll) window.scrollTo(0, 0);
+}
+

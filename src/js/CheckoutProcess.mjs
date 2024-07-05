@@ -1,76 +1,154 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 
-function calculateSubtotal(cartItems) {
-  return cartItems.reduce((total, item) => total + item.FinalPrice, 0);
-}
 
-function calculateShipping(cartItems) {
-  return 10 + (cartItems.length - 1) * 2;
-}
 
-function calculateTax(subtotal) {
-  return subtotal * 0.06;
-}
+// import { getLocalStorage } from "./utils.mjs";
+// import ExternalServices from "./ExternalServices.mjs";
 
-function packageItems(items) {
-  return items.map(item => ({
-    id: item.Id,
-    name: item.Name,
-    price: item.FinalPrice,
-    quantity: 1
-  }));
-}
+// export default class CheckoutProcess {
+//   constructor() {
+//     this.shippingRate = 10;
+//     this.taxRate = 0.06;
+//   }
+
+//   calculateItemSubtotal(cartItems) {
+//     return cartItems.reduce((total, item) => total + item.FinalPrice, 0);
+//   }
+
+//   calculateShipping(cartItems) {
+//     if (cartItems.length === 0) return 0;
+//     return this.shippingRate + (cartItems.length - 1) * 2;
+//   }
+
+//   calculateTax(subtotal) {
+//     return subtotal * this.taxRate;
+//   }
+
+//   calculateTotal(subtotal, shipping, tax) {
+//     return subtotal + shipping + tax;
+//   }
+
+//   displayOrderSummary(cartItems) {
+//     const subtotal = this.calculateItemSubtotal(cartItems);
+//     const shipping = this.calculateShipping(cartItems);
+//     const tax = this.calculateTax(subtotal);
+//     const total = this.calculateTotal(subtotal, shipping, tax);
+
+//     document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+//     document.getElementById("shipping").textContent = shipping.toFixed(2);
+//     document.getElementById("tax").textContent = tax.toFixed(2);
+//     document.getElementById("orderTotal").textContent = total.toFixed(2);
+//   }
+
+//   async checkout(form) {
+//     const cartItems = getLocalStorage("so-cart");
+//     const items = cartItems.map(item => ({
+//       id: item.Id,
+//       name: item.Name,
+//       price: item.FinalPrice,
+//       quantity: 1
+//     }));
+
+//     const orderData = {
+//       orderDate: new Date().toISOString(),
+//       fname: form.elements["fname"].value,
+//       lname: form.elements["lname"].value,
+//       street: form.elements["street"].value,
+//       city: form.elements["city"].value,
+//       state: form.elements["state"].value,
+//       zip: form.elements["zip"].value,
+//       cardNumber: form.elements["cardNumber"].value,
+//       expiration: form.elements["expiration"].value,
+//       code: form.elements["code"].value,
+//       items: items,
+//       orderTotal: document.getElementById("orderTotal").textContent,
+//       shipping: document.getElementById("shipping").textContent,
+//       tax: document.getElementById("tax").textContent
+//     };
+
+//     const services = new ExternalServices();
+//     try {
+//       const response = await services.checkout(orderData);
+//       // handle success response, e.g., redirect to a success page
+//     } catch (error) {
+//       console.error("Checkout failed", error);
+//     }
+//   }
+// }
+
+
+import { getLocalStorage } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
+import { alertMessage } from "./utils.mjs";
 
 export default class CheckoutProcess {
   constructor() {
-    this.cartItems = getLocalStorage("so-cart") || [];
-    this.subtotal = calculateSubtotal(this.cartItems);
-    this.shipping = calculateShipping(this.cartItems);
-    this.tax = calculateTax(this.subtotal);
-    this.orderTotal = this.subtotal + this.shipping + this.tax;
+    this.shippingRate = 10;
+    this.taxRate = 0.06;
   }
 
-  displayOrderSummary() {
-    document.getElementById("subtotal").textContent = this.subtotal.toFixed(2);
-    document.getElementById("shipping").textContent = this.shipping.toFixed(2);
-    document.getElementById("tax").textContent = this.tax.toFixed(2);
-    document.getElementById("orderTotal").textContent = this.orderTotal.toFixed(2);
+  calculateItemSubtotal(cartItems) {
+    return cartItems.reduce((total, item) => total + item.FinalPrice, 0);
+  }
+
+  calculateShipping(cartItems) {
+    if (cartItems.length === 0) return 0;
+    return this.shippingRate + (cartItems.length - 1) * 2;
+  }
+
+  calculateTax(subtotal) {
+    return subtotal * this.taxRate;
+  }
+
+  calculateTotal(subtotal, shipping, tax) {
+    return subtotal + shipping + tax;
+  }
+
+  displayOrderSummary(cartItems) {
+    const subtotal = this.calculateItemSubtotal(cartItems);
+    const shipping = this.calculateShipping(cartItems);
+    const tax = this.calculateTax(subtotal);
+    const total = this.calculateTotal(subtotal, shipping, tax);
+
+    document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+    document.getElementById("shipping").textContent = shipping.toFixed(2);
+    document.getElementById("tax").textContent = tax.toFixed(2);
+    document.getElementById("orderTotal").textContent = total.toFixed(2);
   }
 
   async checkout(form) {
-    const order = {
+    const cartItems = getLocalStorage("so-cart");
+    const items = cartItems.map(item => ({
+      id: item.Id,
+      name: item.Name,
+      price: item.FinalPrice,
+      quantity: 1
+    }));
+
+    const orderData = {
       orderDate: new Date().toISOString(),
-      fname: form.fname.value,
-      lname: form.lname.value,
-      street: form.street.value,
-      city: form.city.value,
-      state: form.state.value,
-      zip: form.zip.value,
-      cardNumber: form.cardNumber.value,
-      expiration: form.expiration.value,
-      code: form.code.value,
-      items: packageItems(this.cartItems),
-      orderTotal: this.orderTotal.toFixed(2),
-      shipping: this.shipping.toFixed(2),
-      tax: this.tax.toFixed(2)
+      fname: form.elements["fname"].value,
+      lname: form.elements["lname"].value,
+      street: form.elements["street"].value,
+      city: form.elements["city"].value,
+      state: form.elements["state"].value,
+      zip: form.elements["zip"].value,
+      cardNumber: form.elements["cardNumber"].value,
+      expiration: form.elements["expiration"].value,
+      code: form.elements["code"].value,
+      items: items,
+      orderTotal: document.getElementById("orderTotal").textContent,
+      shipping: document.getElementById("shipping").textContent,
+      tax: document.getElementById("tax").textContent
     };
 
+    const services = new ExternalServices();
     try {
-      const response = await fetch('https://wdd330-backend.onrender.com/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(order)
-      });
-      const data = await response.json();
-      console.log(data);
-      alert('Order placed successfully!');
-      setLocalStorage("so-cart", []);
-      window.location.href = '/';
+      const response = await services.checkout(orderData);
+      localStorage.removeItem("so-cart");
+      window.location.href = "../checkout/success.html";
     } catch (error) {
-      console.error('Error:', error);
-      alert('There was an error processing your order. Please try again.');
+      console.error("Checkout failed", error);
+      alertMessage("Checkout failed: " + error.message.message);
     }
   }
 }
