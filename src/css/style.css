@@ -5,7 +5,7 @@
   --primary-color: #f0a868;
   --secondary-color: #525b0f;
   --tertiary-color: #a4b8c4;
-  --light-grey: #d0d0d0;
+  --light-grey: #d0d0d0;  
   --dark-grey: #303030;
 
   /* sizes */
@@ -245,7 +245,7 @@ button {
 .categories a {
   font-size: 0.9rem;
   color: black;
-}
+
 
 @media screen and (min-width: 500px) {
   body {
@@ -261,7 +261,3 @@ button {
   }
 }
 
-footer {
-  font-size: var(--small-font);
-  padding: 1em;
-}
