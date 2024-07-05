@@ -253,7 +253,6 @@ button {
   height: fit-content;
   text-align: center;
   gap: 1.5rem;
-
 }
 
 .categories img {
@@ -261,9 +260,38 @@ button {
 }
 
 .categories a {
-  font-size: .9rem;
+  font-size: 0.9rem;
   color: black;
+}
+footer {
+  font-size: var(--small-font);
+  padding: 1em;
+}
 
+#checkoutForm {
+  display: flex;
+  flex-direction: column;
+  width: 25rem;
+  margin: 1rem auto;
+  padding: 1rem;
+}
+#checkoutForm label,
+#checkoutForm button {
+  margin: 0.4rem 0;
+  border-radius: 10px;
+}
+#checkoutForm input {
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid;
+}
+.order-summary {
+  margin: 1rem;
+}
+
+.order-summary > :last-child {
+  color: red;
+  font-weight: bolder;
 }
 
 @media screen and (min-width: 500px) {
@@ -278,9 +306,4 @@ button {
     font-size: inherit;
     grid-template-columns: 150px auto 15%;
   }
-}
-
-footer {
-  font-size: var(--small-font);
-  padding: 1em;
 }

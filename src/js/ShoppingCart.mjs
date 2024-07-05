@@ -48,6 +48,8 @@ export default class ShoppingCart {
     if (cartItems.length > 0) {
       priceElement.style.display = 'block';
       const total = cartItems.reduce((total, item) => total + item.FinalPrice, 0);
+      setLocalStorage('cart-total', total)
+      setLocalStorage('no-item', cartItems.length)
       priceElement.innerHTML = `Total: $${total.toFixed(2)}`;
     } else {
       priceElement.style.display = 'none';
