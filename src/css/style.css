@@ -5,7 +5,7 @@
   --primary-color: #f0a868;
   --secondary-color: #525b0f;
   --tertiary-color: #a4b8c4;
-  --light-grey: #d0d0d0;  
+  --light-grey: #d0d0d0;
   --dark-grey: #303030;
 
   /* sizes */
@@ -245,8 +245,32 @@ button {
 .categories a {
   font-size: 0.9rem;
   color: black;
+}
+#checkoutForm {
+  display: flex;
+  flex-direction: column;
+  width: 25rem;
+  margin: 1rem auto;
+  padding: 1rem;
+}
+#checkoutForm label,
+#checkoutForm button {
+  margin: 0.4rem 0;
+  border-radius: 10px;
+}
+#checkoutForm input {
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid;
+}
+.order-summary {
+  margin: 1rem;
+}
 
-
+.order-summary > :last-child {
+  color: red;
+  font-weight: bolder;
+}
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
@@ -260,4 +284,3 @@ button {
     grid-template-columns: 150px auto 15%;
   }
 }
-
