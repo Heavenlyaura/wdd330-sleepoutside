@@ -55,6 +55,11 @@ export default class ShoppingCart {
   }
 }
 
+
+document.getElementById('checkoutButton').addEventListener('click', () => {
+  window.location.href = '/checkout/index.html';
+});
+
 // Initialize the shopping cart
 const cart = new ShoppingCart('so-cart', document.querySelector('.product-list'));
 cart.renderCartContents();
