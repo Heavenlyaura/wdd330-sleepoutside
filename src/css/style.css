@@ -81,7 +81,8 @@ header {
   color: var(--tertiary-color);
 }
 
-button {
+button, #checkout {
+  text-decoration: none;
   padding: 0.5em 2em;
   background-color: var(--secondary-color);
   color: white;
@@ -90,6 +91,10 @@ button {
   border: 0;
   font-size: var(--large-font);
   cursor: pointer;
+  width: fit-content;
+}
+#checkout {
+  display: none;
 }
 .divider {
   border-bottom: 2px solid var(--primary-color);
