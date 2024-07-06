@@ -1,4 +1,20 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { formDataToJSON } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs"
+
+const services = new ExternalServices();
+
+function packageItems(items) {
+  const simplifiedItems = items.map((item) => {
+    return {
+      id: item.Id,
+      price: item.FinalPrice,
+      name: item.Name,
+      quantity: 1,
+    };
+  });
+  return simplifiedItems;
+}
 
 export default class CheckoutProcess {
   constructor(key, outputSelector) {
@@ -19,8 +35,11 @@ export default class CheckoutProcess {
 
   calculateItemSummary() {
     // Calculate the total amount of the items in the cart and the number of items.
-    this.itemTotal = this.list.reduce((total, item) => total + item.FinalPrice, 0);
-    const itemCount = this.list.length
+    this.itemTotal = this.list.reduce(
+      (total, item) => total + item.FinalPrice,
+      0,
+    );
+    const itemCount = this.list.length;
 
     // Display the item total and item count (example)
     document.querySelector(this.outputSelector).innerHTML = `
@@ -46,8 +65,22 @@ export default class CheckoutProcess {
     document.querySelector(this.outputSelector).innerHTML += `
       <p>Shipping: $${this.shipping.toFixed(2)}</p>
       <p>Tax: $${this.tax.toFixed(2)}</p>
-      <p>Order Total: $${this.orderTotal.toFixed(2)}</p>
-    `;
+      <p>Order Total: $${this.orderTotal.toFixed(2)}</p>`;
+  }
+
+  async checkout() {
+    const formElement = document.forms["checkoutForm"];
+    const json = formDataToJSON(formElement);
+    // add totals, and item details
+    json.orderDate = new Date();
+    json.orderTotal = this.orderTotal;
+    json.tax = this.tax;
+    json.shipping = this.shipping;
+    json.items = packageItems(this.list);
+    try {
+      const res = await services.checkout(json);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
-
