@@ -40,8 +40,10 @@ export default class ShoppingCart {
 
   calculateTotal(cartItems) {
     const priceElement = document.querySelector(".cart-total");
+    const checkout = document.querySelector("#checkout");
     if (cartItems.length > 0) {
       priceElement.style.display = 'block';
+      checkout.style.display = 'block'
       const total = cartItems.reduce((total, item) => total + item.FinalPrice, 0);
       setLocalStorage('cart-total', total)
       setLocalStorage('no-item', cartItems.length)
