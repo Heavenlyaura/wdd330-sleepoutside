@@ -1,36 +1,18 @@
 
 
 
-// import { loadHeaderFooter } from "./utils.mjs";
-// import CheckoutProcess from "./CheckoutProcess.mjs";
-
-// loadHeaderFooter();
-
-// const checkout = new CheckoutProcess();
-// const cartItems = JSON.parse(localStorage.getItem("so-cart")) || [];
-// checkout.displayOrderSummary(cartItems);
-
-// document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
-//   e.preventDefault();
-//   await checkout.checkout(e.target);
-// });
-
-
-import { loadHeaderFooter } from "./utils.mjs";
 import CheckoutProcess from "./CheckoutProcess.mjs";
+import { loadHeaderFooter } from "./utils.mjs";
+import { getLocalStorage } from "./utils.mjs";
 
 loadHeaderFooter();
 
 const checkout = new CheckoutProcess();
-const cartItems = JSON.parse(localStorage.getItem("so-cart")) || [];
+const cartItems = getLocalStorage("so-cart");
+
 checkout.displayOrderSummary(cartItems);
 
-document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+document.querySelector('#checkoutForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  const form = e.target;
-  if (form.checkValidity()) {
-    await checkout.checkout(form);
-  } else {
-    form.reportValidity();
-  }
+  checkout.checkout(e.target);
 });

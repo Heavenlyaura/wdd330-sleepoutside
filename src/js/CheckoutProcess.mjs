@@ -1,8 +1,7 @@
 
-
-
 // import { getLocalStorage } from "./utils.mjs";
 // import ExternalServices from "./ExternalServices.mjs";
+// import { alertMessage } from "./utils.mjs";
 
 // export default class CheckoutProcess {
 //   constructor() {
@@ -68,15 +67,18 @@
 //     const services = new ExternalServices();
 //     try {
 //       const response = await services.checkout(orderData);
-//       // handle success response, e.g., redirect to a success page
+//       localStorage.removeItem("so-cart");
+//       window.location.href = "../checkout/success.html";
 //     } catch (error) {
 //       console.error("Checkout failed", error);
+//       alertMessage("Checkout failed: " + error.message.message);
 //     }
 //   }
 // }
 
 
-import { getLocalStorage } from "./utils.mjs";
+
+import { getLocalStorage, calculateItemSubtotal, calculateShipping, calculateTax, calculateTotal } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 import { alertMessage } from "./utils.mjs";
 
@@ -86,28 +88,11 @@ export default class CheckoutProcess {
     this.taxRate = 0.06;
   }
 
-  calculateItemSubtotal(cartItems) {
-    return cartItems.reduce((total, item) => total + item.FinalPrice, 0);
-  }
-
-  calculateShipping(cartItems) {
-    if (cartItems.length === 0) return 0;
-    return this.shippingRate + (cartItems.length - 1) * 2;
-  }
-
-  calculateTax(subtotal) {
-    return subtotal * this.taxRate;
-  }
-
-  calculateTotal(subtotal, shipping, tax) {
-    return subtotal + shipping + tax;
-  }
-
   displayOrderSummary(cartItems) {
-    const subtotal = this.calculateItemSubtotal(cartItems);
-    const shipping = this.calculateShipping(cartItems);
-    const tax = this.calculateTax(subtotal);
-    const total = this.calculateTotal(subtotal, shipping, tax);
+    const subtotal = calculateItemSubtotal(cartItems);
+    const shipping = calculateShipping(cartItems);
+    const tax = calculateTax(subtotal);
+    const total = calculateTotal(subtotal, shipping, tax);
 
     document.getElementById("subtotal").textContent = subtotal.toFixed(2);
     document.getElementById("shipping").textContent = shipping.toFixed(2);
@@ -121,7 +106,7 @@ export default class CheckoutProcess {
       id: item.Id,
       name: item.Name,
       price: item.FinalPrice,
-      quantity: 1
+      quantity: item.quantity
     }));
 
     const orderData = {

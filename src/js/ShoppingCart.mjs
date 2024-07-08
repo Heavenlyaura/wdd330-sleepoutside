@@ -1,8 +1,6 @@
 
 
-
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-import { loadHeaderFooter } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, loadHeaderFooter, calculateItemSubtotal, calculateShipping, calculateTax, calculateTotal } from "./utils.mjs";
 loadHeaderFooter();
 
 function cartItemTemplate(item) {
@@ -31,13 +29,27 @@ export default class ShoppingCart {
   }
   renderCartContents() {
     const cartItems = getLocalStorage(this.key);
-    calculateTotal(cartItems);
+    this.calculateAndDisplayTotal(cartItems);
     const htmlItems = cartItems.map((item) => cartItemTemplate(item));
     this.parentSelector.innerHTML = htmlItems.join("");
     this.addQuantityListeners();
     this.addRemoveItemListeners();
+    this.addCheckoutListener();
   }
-  
+
+  calculateAndDisplayTotal(cartItems) {
+    const subtotal = calculateItemSubtotal(cartItems);
+    const shipping = calculateShipping(cartItems);
+    const tax = calculateTax(subtotal);
+    const total = calculateTotal(subtotal, shipping, tax);
+
+    const priceElement = document.querySelector(".cart-total");
+    if (priceElement) {
+      priceElement.style.display = 'block';
+      priceElement.innerHTML = `Total: $${total.toFixed(2)}`;
+    }
+  }
+
   addQuantityListeners() {
     const quantityInputs = document.querySelectorAll(".cart-quantity");
     quantityInputs.forEach(input => {
@@ -54,6 +66,15 @@ export default class ShoppingCart {
         this.removeItem(e.target.dataset.id);
       });
     });
+  }
+
+  addCheckoutListener() {
+    const checkoutButton = document.getElementById('checkoutButton');
+    if (checkoutButton) {
+      checkoutButton.addEventListener('click', () => {
+        window.location.href = '../checkout/index.html';
+      });
+    }
   }
 
   updateQuantity(id, newQuantity) {
@@ -74,11 +95,4 @@ export default class ShoppingCart {
   }
 }
 
-function calculateTotal(cartItems) {
-  if (cartItems) {
-    const price = document.querySelector(".cart-total");
-    price.style.display = 'block';
-    let total = cartItems.reduce((total, item) => total + (item.FinalPrice * item.quantity), 0);
-    price.innerHTML = `Total: $${total.toFixed(2)}`;
-  }
-}
+
