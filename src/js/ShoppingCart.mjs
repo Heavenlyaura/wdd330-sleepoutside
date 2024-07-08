@@ -93,6 +93,8 @@ export default class ShoppingCart {
     setLocalStorage(this.key, updatedCart);
     this.renderCartContents();
   }
+
+ 
 }
 
 
